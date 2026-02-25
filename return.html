@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Return Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .params {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .param-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f4f4f4;
+            border-radius: 3px;
+        }
+        .param-key {
+            font-weight: bold;
+            color: #0066cc;
+        }
+        .param-value {
+            color: #333;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✓ Return Successful</h1>
+        <p>You have been redirected back from the external website.</p>
+        
+        <div id="params"></div>
+    </div>
+
+    <script>
+        // Parse all URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const paramsDiv = document.getElementById('params');
+
+        if (urlParams.toString()) {
+            let paramsHTML = '<div class="params"><h3>Received Parameters:</h3>';
+            
+            urlParams.forEach((value, key) => {
+                paramsHTML += `
+                    <div class="param-item">
+                        <span class="param-key">${key}:</span>
+                        <span class="param-value">${value}</span>
+                    </div>
+                `;
+            });
+            
+            paramsHTML += '</div>';
+            paramsDiv.innerHTML = paramsHTML;
+
+            // Log all parameters to console
+            const allParams = {};
+            urlParams.forEach((value, key) => {
+                allParams[key] = value;
+            });
+            console.log('Return URL Parameters:', allParams);
+        } else {
+            paramsDiv.innerHTML = '<p><em>No parameters received in the URL.</em></p>';
+        }
+    </script>
+</body>
+</html>
