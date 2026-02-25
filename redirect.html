@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OAuth Callback</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .success { color: green; }
+        .error { color: red; }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>OAuth Authorization</h1>
+    <div id="result"></div>
+
+    <script>
+        // Parse URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
+        const error = urlParams.get('error');
+        const errorDescription = urlParams.get('error_description');
+
+        const resultDiv = document.getElementById('result');
+
+        if (error) {
+            resultDiv.innerHTML = `
+                <h2 class="error">Authorization Failed</h2>
+                <p><strong>Error:</strong> ${error}</p>
+                ${errorDescription ? `<p><strong>Description:</strong> ${errorDescription}</p>` : ''}
+            `;
+        } else if (code) {
+            resultDiv.innerHTML = `
+                <h2 class="success">Authorization Successful!</h2>
+                <p><strong>Authorization Code:</strong></p>
+                <pre>${code}</pre>
+                ${state ? `<p><strong>State:</strong> <code>${state}</code></p>` : ''}
+                <p><em>Copy the authorization code above to complete the OAuth flow.</em></p>
+            `;
+            
+            // Log to console for easy copying
+            console.log('Authorization Code:', code);
+            if (state) console.log('State:', state);
+        } else {
+            resultDiv.innerHTML = `
+                <h2>Waiting for Authorization...</h2>
+                <p>This page will display the authorization code after you complete the OAuth flow.</p>
+            `;
+        }
+
+        // Display all URL parameters for debugging
+        if (urlParams.toString()) {
+            const allParams = {};
+            urlParams.forEach((value, key) => {
+                allParams[key] = value;
+            });
+            console.log('All URL Parameters:', allParams);
+        }
+    </script>
+</body>
+</html>
